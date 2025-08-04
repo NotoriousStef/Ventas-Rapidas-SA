@@ -26,11 +26,11 @@ Venta ventas[100000];
 
 int main()
 {
-	int cantidad;
+    int cantidad;
 
-	cout << "======================== Bienvenido a Ventas Rapidas SA ========================" << endl;
-	cout << "¿Cuantos ventas desea registrar?: ";
-	cin >> cantidad;
+    cout << "======================== Bienvenido a Ventas Rapidas SA ========================" << endl;
+    cout << "¿Cuantos ventas desea registrar?: ";
+    cin >> cantidad;
 
     for (int i = 0; i < cantidad; i++) {
         int fecha;
@@ -45,6 +45,7 @@ int main()
         cout << "Ingrese el codigo de vendedor: ";
         cin >> codigoVendedor;
         ventas[i].codigoVendedor = codigoVendedor;
+        //validar código de vendedor aquí
         cout << "Ingrese el codigo de producto: ";
         cin >> codigoProducto;
         ventas[i].codigoProducto = codigoProducto;
@@ -74,7 +75,7 @@ bool validarVenta(Venta venta) {
 }
 
 void registroArchivo(Venta ventas[], int cantidad) {
-    FILE* archivo = fopen("ventas_diarias.dat", "ab"); 
+    FILE* archivo = fopen("ventas_diarias.dat", "ab");
     if (archivo == NULL) {
         cout << "Error al abrir el archivo para escritura." << endl;
         return;
@@ -90,9 +91,9 @@ bool codigoVendedorExiste(int codigoBuscado) {
     FILE* archivo = fopen("vendedores.dat", "rb");
     if (!archivo) return false;
 
-    Vendedor temp; 
+    Vendedor temp;
     while (fread(&temp, sizeof(Vendedor), 1, archivo) == 1) {
-        if (temp.codigo == codigoBuscado) { 
+        if (temp.codigo == codigoBuscado) {
             fclose(archivo);
             return true;
         }
@@ -108,7 +109,7 @@ int medirCantidadDeVentasPorFechas(int fechaBuscada) {
     FILE* archivo = fopen("ventas_diarias.dat", "rb");
     if (!archivo) return 0;
 
-    Venta temp; 
+    Venta temp;
     while (fread(&temp, sizeof(Venta), 1, archivo) == 1) {
         if (temp.fecha == fechaBuscada) {
             cantFechaBuscada++;
