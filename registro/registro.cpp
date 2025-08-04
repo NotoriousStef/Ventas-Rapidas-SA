@@ -13,18 +13,25 @@ struct Vendedor {
 void registroArchivo(Vendedor vendedores[], int cantidad);
 bool codigoExiste(int codigoBuscado);
 bool validarCodigo(int codigo, int index);
+int medirVendedores();
 
 Vendedor vendedores[14]; // Array para almacenar hasta 15 vendedores
 
 int main()
 {
 	cout << "======================== Bienvenido a Ventas Rapidas SA ========================" << endl;
+	int vendedoresRegistrados = medirVendedores();
+	int disponibles = 15 - vendedoresRegistrados; // Calcular vendedores disponibles
+	if (disponibles == 0) {
+		cout << "No hay espacio disponible para registrar nuevos vendedores. El limite de 15 fue alcanzado." << endl;
+		return 0; // Espacio lleno
+	}
 	cout << "Cuantos vendedores desea registrar? (Maximo 15): ";
 	int cantidad;
 	cin >> cantidad;
-	if (cantidad < 1 || 15 < cantidad) {
-		cout << "Cantidad invalida. Debe ser entre 1 y 15." << endl;
-		return 1; // Salir del programa si la cantidad es invalida
+	if (cantidad < 1 || disponibles < cantidad) {
+		cout << "Cantidad invalida. Debe ser entre 1 y " << disponibles << "." << endl;
+		return 1; // Cantidad invalida
 	}
     int codigo;
     for (int i = 0; i < cantidad; i++) {
@@ -91,4 +98,13 @@ bool codigoExiste(int codigoBuscado) {
 
     fclose(archivo);
     return false;
+}
+
+int medirVendedores() {
+	FILE* archivo = fopen("vendedores.dat", "rb");
+	if (!archivo) return 0;
+	fseek(archivo, 0, SEEK_END);
+	int cantidadVendedores = ftell(archivo) / sizeof(Vendedor);
+	fclose(archivo);
+	return cantidadVendedores;
 }
