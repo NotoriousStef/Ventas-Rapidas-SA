@@ -12,6 +12,7 @@ struct Vendedor {
 
 void registroArchivo(Vendedor vendedores[], int cantidad);
 bool codigoExiste(int codigoBuscado);
+bool validarCodigo(int codigo, int index);
 
 Vendedor vendedores[14]; // Array para almacenar hasta 15 vendedores
 
@@ -30,29 +31,37 @@ int main()
         cout << "#Registro " << (i + 1) << ":" << endl;
         cout << "Codigo de vendedor: ";
         cin >> codigo;
-        if (codigoExiste(codigo) == true) {
-            cout << "El codigo unico de vendedor ingresado ya existe. Revise los numeros e intente nuevamente." << endl;
-            i--; // Repetir el registro
-            break;
-        }
-        else {
-            for (int j = 0; j < i; j++) {
-                if (vendedores[j].codigo == codigo) {
-                    cout << "El codigo ya ha sido ingresado. Por favor, ingrese un codigo diferente." << endl;
-                    i--; // Repetir el registro
-                    break;
-                }
-			}
-            vendedores[i].codigo = codigo;
-        }
 
-        cin.ignore();
-        cout << "Nombre: ";
-        cin.getline(vendedores[i].nombre, sizeof(vendedores[i].nombre));
-		cout << "Sucursal: ";
-		cin.getline(vendedores[i].sucursal, sizeof(vendedores[i].sucursal));
+        if (validarCodigo(codigo, i)) {
+            vendedores[i].codigo = codigo;
+            cin.ignore();
+            cout << "Nombre: ";
+            cin.getline(vendedores[i].nombre, sizeof(vendedores[i].nombre));
+		    cout << "Sucursal: ";
+		    cin.getline(vendedores[i].sucursal, sizeof(vendedores[i].sucursal));
+        } else {
+            i--;
+        }
     }
     registroArchivo(vendedores, cantidad);
+}
+
+bool validarCodigo(int codigo, int index) {
+   if (codigoExiste(codigo) == true) {
+        cout << "El codigo unico de vendedor ingresado ya existe. Revise los numeros e intente nuevamente." << endl;
+        // Repetir el registro
+        return 0;
+    }
+
+    for (int j = 0; j < index; j++) {
+        if (vendedores[j].codigo == codigo) {
+            cout << "El codigo ya ha sido ingresado. Por favor, ingrese un codigo diferente." << endl;
+            // Repetir el registro
+            return 0;
+        }
+	}
+
+    return 1;
 }
 
 void registroArchivo(Vendedor vendedores[], int cantidad) {
