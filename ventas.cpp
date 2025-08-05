@@ -69,7 +69,7 @@ Venta ingresarVenta(int cantidadActual) {
         if (codigoVendedorExiste(nuevaVenta.codigoVendedor)) {
             codigoVendedorValido = true;
         } else {
-            cout << "El codigo unico de vendedor ingresado no existe. Revise los numeros e intente nuevamente." << endl; // ================ lo deja intentar nuevamente? =============
+            cout << "El codigo unico de vendedor ingresado no existe. Revise los numeros e intente nuevamente." << endl;
         }
     }
     
