@@ -20,7 +20,7 @@ struct Vendedor {
 void registroArchivo(Venta ventas[], int cantidad);
 bool codigoVendedorExiste(int codigoBuscado);
 int medirCantidadDeVentasPorFechas(int fechaBuscada);
-Venta ingresarVenta();
+Venta ingresarVenta(int cantidadActual);
 
 Venta ventas[100000];
 
@@ -33,14 +33,14 @@ int main()
     cin >> cantidad;
 
     for (int i = 0; i < cantidad; i++) {
-        ventas[i] = ingresarVenta();
+        ventas[i] = ingresarVenta(i);
     }
 
     registroArchivo(ventas, cantidad);
     cout << "Registro de ventas finalizado. Gracias por usar el sistema de Ventas Rapidas SA" << endl;
 }
 
-Venta ingresarVenta() {
+Venta ingresarVenta(int cantidadActual) {
     Venta nuevaVenta;
     bool fechaValida = false;
     bool codigoVendedorValido = false;
@@ -49,8 +49,14 @@ Venta ingresarVenta() {
         cout << "Ingrese la fecha en formato AAAAMMDD (solo los números): ";
         cin >> nuevaVenta.fecha;
 
-        if (medirCantidadDeVentasPorFechas(nuevaVenta.fecha) >= 1000) {
-            cout << "Se exedio el limite de ingreso de ventas por fecha." << endl;
+        int ventasEnArchivo = medirCantidadDeVentasPorFechas(nuevaVenta.fecha);
+        int ventasEnMemoria = 0;
+        for (int i = 0; i < cantidadActual; i++) {
+            if (ventas[i].fecha == nuevaVenta.fecha) ventasEnMemoria++;
+        }
+
+        if ((ventasEnArchivo + ventasEnMemoria) >= 1000) {
+            cout << "Se excedió el límite de ingreso de ventas por fecha." << endl;
         } else {
             fechaValida = true;
         }
