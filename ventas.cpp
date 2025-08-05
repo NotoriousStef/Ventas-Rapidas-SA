@@ -29,7 +29,7 @@ int main()
     int cantidad;
 
     cout << "======================== Bienvenido a Ventas Rapidas SA ========================" << endl;
-    cout << "¿Cuantos ventas desea registrar?: ";
+    cout << "¿Cuantas ventas desea registrar?: ";
     cin >> cantidad;
 
     for (int i = 0; i < cantidad; i++) {
@@ -69,7 +69,7 @@ Venta ingresarVenta(int cantidadActual) {
         if (codigoVendedorExiste(nuevaVenta.codigoVendedor)) {
             codigoVendedorValido = true;
         } else {
-            cout << "El codigo unico de vendedor ingresado no existe. Revise los numeros e intente nuevamente." << endl;
+            cout << "El codigo unico de vendedor ingresado no existe. Revise los numeros e intente nuevamente." << endl; // ================ lo deja intentar nuevamente? =============
         }
     }
     

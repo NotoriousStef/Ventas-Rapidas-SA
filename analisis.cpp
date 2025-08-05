@@ -1,4 +1,4 @@
-// ventas.cpp
+// analisis.cpp
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
@@ -56,6 +56,7 @@ void establecerVendedores() {
     FILE* archivo = fopen("vendedores.dat", "rb");
     if (!archivo) {
         cout << "Error al abrir el archivo de registro." << endl;
+        return 0; // No existe el archivo
     } else {
         Vendedor temp;
         int i = 0;
@@ -77,7 +78,7 @@ int vendedorConMayorIngreso() {
     Venta temp;
     int i = 0;
     while (fread(&temp, sizeof(Venta), 1, archivo) == 1) {
-        for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < 15; i++) { //debería haber un cantidad de vendedores no hardcodear el 15, se hace con el fseek y el ftell, lo puedo hacer yo
             if (temp.codigoVendedor == ventasVendedores[i].codigoVendedor) {
                 ventasVendedores[i].totalVentas += temp.monto;
                 break;
@@ -90,7 +91,7 @@ int vendedorConMayorIngreso() {
     int vendedorMaxIngreso = 0;
 
     for (int j = 0; j < 15; j++) {
-        if (j == 0 || ventasVendedores[j].totalVentas > ventasVendedores[vendedorMaxIngreso].totalVentas) {
+		if (j == 0 || ventasVendedores[j].totalVentas > ventasVendedores[vendedorMaxIngreso].totalVentas) { // no es necesario el j==0 porque ya se settea a 0 inicialmente
             vendedorMaxIngreso = j;
         }
     }
