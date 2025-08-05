@@ -30,13 +30,18 @@ struct VentasSucursal {
     int totalVentas;
 };
 
+struct Producto {
+    int codigoProducto;
+    int monto;
+    int ocurrencias;
+};
+
 VentasSucursal ventasSucursales[3];
 
 void establecerVendedores();
 int vendedorConMayorIngreso();
 void establecerSucursales();
 int sucursalConMayorIngreso();
-char buscarSucursalAPartirDeVendedor(int codigoVendedor, int index);
 void buscarSucursalAPartirDeVendedor(char nombreSucursal[20], int codigoVendedor);
 void rankingProductos();
 
@@ -54,8 +59,8 @@ int main()
 
 	establecerSucursales();
     int sucursalMaxIngreso = sucursalConMayorIngreso();
-    cout << "La sucursal con mayor ingreso es: " << ventasSucursales[vendedorMaxIngreso].nombreSucursal << endl;
-    cout << "Total de ventas de la sucursal: " << ventasSucursales[vendedorMaxIngreso].totalVentas << endl;
+    cout << "La sucursal con mayor ingreso es: " << ventasSucursales[sucursalMaxIngreso].nombreSucursal << endl;
+    cout << "Total de ventas de la sucursal: " << ventasSucursales[sucursalMaxIngreso].totalVentas << endl;
 
     rankingProductos();
 
@@ -197,12 +202,13 @@ void rankingProductos() {
         return;
     }
     Venta temp;
-    Venta productosVendidos[1000]; // Suponiendo un máximo de 1000 productos diferentes
+    Producto productosVendidos[1000]; // Suponiendo un máximo de 1000 productos diferentes
     int cantidadProductos = 0;
     int i = 0;
     while (fread(&temp, sizeof(Venta), 1, archivo) == 1) {
         if (i == 0) {
             productosVendidos[i].codigoProducto = temp.codigoProducto;
+            productosVendidos[i].ocurrencias = 1;
             productosVendidos[i].monto = temp.monto;
             cantidadProductos++;
         } else {
@@ -210,6 +216,7 @@ void rankingProductos() {
             for (int j = 0; j < cantidadProductos; j++) {
                 if (productosVendidos[j].codigoProducto == temp.codigoProducto) {
                     productosVendidos[j].monto += temp.monto;
+                    productosVendidos[j].ocurrencias++;
                     existe = true;
                     break;
                 }
@@ -224,13 +231,16 @@ void rankingProductos() {
     }
     fclose(archivo);
 
-    // Ordenar productos por monto vendido de mayor a menor
+    // Ordenar productos por veces vendidos (monto)
     for (int j = 0; j < cantidadProductos - 1; j++) {
         for (int k = j + 1; k < cantidadProductos; k++) {
-            if (productosVendidos[j].monto < productosVendidos[k].monto) {
-                Venta tempProducto = productosVendidos[j];
+            if (productosVendidos[j].ocurrencias < productosVendidos[k].ocurrencias) {
+                Venta tempProducto;
+                tempProducto.codigoProducto = productosVendidos[j].codigoProducto;
+                tempProducto.monto = productosVendidos[j].monto;
                 productosVendidos[j] = productosVendidos[k];
-                productosVendidos[k] = tempProducto;
+                productosVendidos[k].codigoProducto = tempProducto.codigoProducto;
+                productosVendidos[k].monto = tempProducto.monto;
             }
         }
     }
