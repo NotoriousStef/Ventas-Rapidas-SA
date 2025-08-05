@@ -34,6 +34,8 @@ VentasSucursal ventasSucursales[3];
 
 void establecerVendedores();
 int vendedorConMayorIngreso();
+void establecerSucursales();
+int sucursalConMayorIngreso(); 
 
 int main()
 {
@@ -48,7 +50,7 @@ int main()
     cout << "Total de ventas del vendedor: " << ventasVendedores[vendedorMaxIngreso].totalVentas << endl;
 
     //TODO: Implementar la busqueda de sucursal con mayor ingreso y producto mas vendido
-
+	establecerSucursales();
     cout << "Gracias por usar el sistema de Ventas Rapidas SA" << endl;
 }
 
@@ -56,7 +58,6 @@ void establecerVendedores() {
     FILE* archivo = fopen("vendedores.dat", "rb");
     if (!archivo) {
         cout << "Error al abrir el archivo de registro." << endl;
-        return 0; // No existe el archivo
     } else {
         Vendedor temp;
         int i = 0;
@@ -66,9 +67,8 @@ void establecerVendedores() {
             ventasVendedores[i].totalVentas = 0;
             i++;
         }
-
-        fclose(archivo);
-    };
+    }
+    fclose(archivo);
 }
 
 int vendedorConMayorIngreso() {
@@ -78,7 +78,7 @@ int vendedorConMayorIngreso() {
     Venta temp;
     int i = 0;
     while (fread(&temp, sizeof(Venta), 1, archivo) == 1) {
-		for (int i = 0; i < 15; i++) { //debería haber un cantidad de vendedores no hardcodear el 15, se hace con el fseek y el ftell, lo puedo hacer yo
+		for (int i = 0; i < 15; i++) {
             if (temp.codigoVendedor == ventasVendedores[i].codigoVendedor) {
                 ventasVendedores[i].totalVentas += temp.monto;
                 break;
@@ -91,7 +91,7 @@ int vendedorConMayorIngreso() {
     int vendedorMaxIngreso = 0;
 
     for (int j = 0; j < 15; j++) {
-		if (j == 0 || ventasVendedores[j].totalVentas > ventasVendedores[vendedorMaxIngreso].totalVentas) { // no es necesario el j==0 porque ya se settea a 0 inicialmente
+		if (ventasVendedores[j].totalVentas > ventasVendedores[vendedorMaxIngreso].totalVentas) {
             vendedorMaxIngreso = j;
         }
     }
@@ -107,39 +107,37 @@ void establecerSucursales() {
         Vendedor temp;
         int i = 0;
         while (fread(&temp, sizeof(Vendedor), 1, archivo) == 1) {
-            strcpy(ventasSucursales[i].nombreSucursal, temp.sucursal);
-            ventasVendedores[i].totalVentas = 0;
-            i++;
+			if (i == 0) {
+				strcpy(ventasSucursales[i].nombreSucursal, temp.sucursal);
+				ventasSucursales[i].totalVentas = 0;
+			}
+			else {
+				bool existe = false;
+				for (int j = 0; j <= i; j++) {
+					if (strcmp(ventasSucursales[j].nombreSucursal, temp.sucursal) == 0) {
+						existe = true;
+					}
+				}
+				if (!existe) {
+					strcpy(ventasSucursales[i].nombreSucursal, temp.sucursal);
+					ventasSucursales[i].totalVentas = 0;
+				}
+			}
+			i++;
         }
 
         fclose(archivo);
-    };
+    }
 }
 
-/* int sucursalConMayorIngreso() { //Falta de implementacion
+int sucursalesConMayorIngreso() {
     FILE* archivo = fopen("ventas_diarias.dat", "rb");
     if (!archivo) return 0;
 
     Venta temp;
     int i = 0;
     while (fread(&temp, sizeof(Venta), 1, archivo) == 1) {
-        for (int i = 0; i < 15; i++) {
-            if (temp.codigoVendedor == ventasVendedores[i].codigoVendedor) {
-                ventasVendedores[i].totalVentas += temp.monto;
-                break;
-            }
-        }
+        	
     }
+}
 
-    fclose(archivo);
-
-    int vendedorMaxIngreso = 0;
-
-    for (int j = 0; j < 15; j++) {
-        if (j == 0 || ventasVendedores[j].totalVentas > ventasVendedores[vendedorMaxIngreso].totalVentas) {
-            vendedorMaxIngreso = j;
-        }
-    }
-
-    return vendedorMaxIngreso;
-} */
