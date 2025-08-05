@@ -130,14 +130,56 @@ void establecerSucursales() {
     }
 }
 
-int sucursalesConMayorIngreso() {
+void rankingProductos() {
     FILE* archivo = fopen("ventas_diarias.dat", "rb");
-    if (!archivo) return 0;
-
+    if (!archivo) {
+        cout << "Error al abrir el archivo de ventas." << endl;
+        return;
+    }
     Venta temp;
+    Venta productosVendidos[1000]; // Suponiendo un máximo de 1000 productos diferentes
+    int cantidadProductos = 0;
     int i = 0;
     while (fread(&temp, sizeof(Venta), 1, archivo) == 1) {
-        	
+        if (i == 0) {
+            productosVendidos[i].codigoProducto = temp.codigoProducto;
+            productosVendidos[i].monto = temp.monto;
+            cantidadProductos++;
+        } else {
+            bool existe = false;
+            for (int j = 0; j < cantidadProductos; j++) {
+                if (productosVendidos[j].codigoProducto == temp.codigoProducto) {
+                    productosVendidos[j].monto += temp.monto;
+                    existe = true;
+                    break;
+                }
+            }
+            if (!existe) {
+                productosVendidos[cantidadProductos].codigoProducto = temp.codigoProducto;
+                productosVendidos[cantidadProductos].monto = temp.monto;
+                cantidadProductos++;
+            }
+        }
+        i++;
     }
+    fclose(archivo);
+
+    // Ordenar productos por monto vendido
+    for (int j = 0; j < cantidadProductos - 1; j++) {
+        for (int k = j + 1; k < cantidadProductos; k++) {
+            if (productosVendidos[j].monto < productosVendidos[k].monto) {
+                Venta tempProducto = productosVendidos[j];
+                productosVendidos[j] = productosVendidos[k];
+                productosVendidos[k] = tempProducto;
+            }
+        }
+    }
+
+    cout << "Ranking de productos vendidos:" << endl;
+    for (int j = 0; j < cantidadProductos; j++) {
+        cout << "Producto: " << productosVendidos[j].codigoProducto << ", Monto vendido: " << productosVendidos[j].monto << endl;
+    }
+
+
 }
 
