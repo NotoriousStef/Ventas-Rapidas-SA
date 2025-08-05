@@ -19,8 +19,8 @@ struct Vendedor {
 
 void registroArchivo(Venta ventas[], int cantidad);
 bool codigoVendedorExiste(int codigoBuscado);
-bool validarVenta(Venta venta);
 int medirCantidadDeVentasPorFechas(int fechaBuscada);
+Venta ingresarVenta();
 
 Venta ventas[100000];
 
@@ -33,45 +33,46 @@ int main()
     cin >> cantidad;
 
     for (int i = 0; i < cantidad; i++) {
-        int fecha;
-        int codigoVendedor;
-        int codigoProducto;
-        int monto;
-
-        cout << "#Registro " << (i + 1) << ":" << endl;
-        cout << "Ingrese la fecha en formato AAAAMMDD (solo los números): ";
-        cin >> fecha;
-        ventas[i].fecha = fecha;
-        cout << "Ingrese el codigo de vendedor: ";
-        cin >> codigoVendedor;
-        ventas[i].codigoVendedor = codigoVendedor;
-        //validar código de vendedor aquí
-        cout << "Ingrese el codigo de producto: ";
-        cin >> codigoProducto;
-        ventas[i].codigoProducto = codigoProducto;
-        cout << "Ingrese el monto de la venta (solo los números): ";
-        cin >> monto;
-        ventas[i].monto = monto;
-
-        if (!validarVenta(ventas[i])) {
-            i--;
-        }
+        ventas[i] = ingresarVenta();
     }
+
     registroArchivo(ventas, cantidad);
+    cout << "Registro de ventas finalizado. Gracias por usar el sistema de Ventas Rapidas SA" << endl;
 }
 
-bool validarVenta(Venta venta) {
-    if (medirCantidadDeVentasPorFechas(venta.fecha) >= 1000) {
-        cout << "Se exedio el limite de ingreso de ventas por fecha." << endl;
-        return 0;
+Venta ingresarVenta() {
+    Venta nuevaVenta;
+    bool fechaValida = false;
+    bool codigoVendedorValido = false;
+
+    while (!fechaValida) {
+        cout << "Ingrese la fecha en formato AAAAMMDD (solo los números): ";
+        cin >> nuevaVenta.fecha;
+
+        if (medirCantidadDeVentasPorFechas(nuevaVenta.fecha) >= 1000) {
+            cout << "Se exedio el limite de ingreso de ventas por fecha." << endl;
+        } else {
+            fechaValida = true;
+        }
     }
 
-    if (codigoVendedorExiste(venta.codigoVendedor)) {
-        cout << "El codigo unico de vendedor ingresado no existe. Revise los numeros e intente nuevamente." << endl;
-        return 0;
-    }
+    while (!codigoVendedorValido) {
+        cout << "Ingrese el codigo de vendedor: ";
+        cin >> nuevaVenta.codigoVendedor;
 
-    return 1;
+        if (codigoVendedorExiste(nuevaVenta.codigoVendedor)) {
+            codigoVendedorValido = true;
+        } else {
+            cout << "El codigo unico de vendedor ingresado no existe. Revise los numeros e intente nuevamente." << endl;
+        }
+    }
+    
+    cout << "Ingrese el codigo de producto: ";
+    cin >> nuevaVenta.codigoProducto;
+    cout << "Ingrese el monto de la venta (solo los números): ";
+    cin >> nuevaVenta.monto;
+
+    return nuevaVenta;
 }
 
 void registroArchivo(Venta ventas[], int cantidad) {
