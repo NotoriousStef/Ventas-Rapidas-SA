@@ -231,22 +231,19 @@ void rankingProductos() {
     }
     fclose(archivo);
 
-    // Ordenar productos por veces vendidos (monto)
+    // Ordenar productos por veces vendidos (ocurrencias)
     for (int j = 0; j < cantidadProductos - 1; j++) {
         for (int k = j + 1; k < cantidadProductos; k++) {
             if (productosVendidos[j].ocurrencias < productosVendidos[k].ocurrencias) {
-                Venta tempProducto;
-                tempProducto.codigoProducto = productosVendidos[j].codigoProducto;
-                tempProducto.monto = productosVendidos[j].monto;
+                Producto temp = productosVendidos[j];
                 productosVendidos[j] = productosVendidos[k];
-                productosVendidos[k].codigoProducto = tempProducto.codigoProducto;
-                productosVendidos[k].monto = tempProducto.monto;
+                productosVendidos[k] = temp;
             }
         }
     }
 
     cout << "Ranking de productos vendidos:" << endl;
     for (int j = 0; j < cantidadProductos; j++) {
-        cout << "Producto: " << productosVendidos[j].codigoProducto << ", Monto vendido: " << productosVendidos[j].monto << endl;
+        cout << "Producto: " << productosVendidos[j].codigoProducto << ", Ocurrencias: " << productosVendidos[j].ocurrencias << ", Monto vendido: " << productosVendidos[j].monto << endl;
     }
 }

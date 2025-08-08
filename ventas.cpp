@@ -46,7 +46,7 @@ Venta ingresarVenta(int cantidadActual) {
     bool codigoVendedorValido = false;
 
     while (!fechaValida) {
-        cout << "Ingrese la fecha en formato AAAAMMDD (solo los números): ";
+        cout << "Ingrese la fecha en formato AAAAMMDD (solo los numeros): ";
         cin >> nuevaVenta.fecha;
 
         int ventasEnArchivo = medirCantidadDeVentasPorFechas(nuevaVenta.fecha);
@@ -56,7 +56,7 @@ Venta ingresarVenta(int cantidadActual) {
         }
 
         if ((ventasEnArchivo + ventasEnMemoria) >= 1000) {
-            cout << "Se excedió el límite de ingreso de ventas por fecha." << endl;
+            cout << "Se excedió el limite de ingreso de ventas por fecha." << endl;
         } else {
             fechaValida = true;
         }
@@ -75,7 +75,7 @@ Venta ingresarVenta(int cantidadActual) {
     
     cout << "Ingrese el codigo de producto: ";
     cin >> nuevaVenta.codigoProducto;
-    cout << "Ingrese el monto de la venta (solo los números): ";
+    cout << "Ingrese el monto de la venta (solo los numeros): ";
     cin >> nuevaVenta.monto;
 
     return nuevaVenta;
