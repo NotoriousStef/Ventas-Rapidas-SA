@@ -29,7 +29,7 @@ int main()
     int cantidad;
 
     cout << "======================== Bienvenido a Ventas Rapidas SA ========================" << endl;
-    cout << "¿Cuantas ventas desea registrar?: ";
+    cout << "Cuantas ventas desea registrar?: ";
     cin >> cantidad;
 
     for (int i = 0; i < cantidad; i++) {

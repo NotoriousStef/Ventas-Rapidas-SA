@@ -224,6 +224,7 @@ void rankingProductos() {
             if (!existe) {
                 productosVendidos[cantidadProductos].codigoProducto = temp.codigoProducto;
                 productosVendidos[cantidadProductos].monto = temp.monto;
+                productosVendidos[i].ocurrencias = 1;
                 cantidadProductos++;
             }
         }
